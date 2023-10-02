@@ -4,4 +4,5 @@ export * from './enrollments-repository';
 export * from './events-repository';
 export * from './users-repository';
 export * from './tickets-repository';
+export * from './hotels-repository';
 export * from './payments-repository';

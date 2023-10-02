@@ -6,7 +6,7 @@ export function handleApplicationErrors(
   err: RequestError | ApplicationError | Error,
   _req: Request,
   res: Response,
-  next: NextFunction,
+  _next: NextFunction,
 ) {
   if (err.name === 'CannotEnrollBeforeStartDateError') {
     return res.status(httpStatus.BAD_REQUEST).send({
@@ -51,11 +51,37 @@ export function handleApplicationErrors(
   }
 
   if (err.name === 'EnrollmentNotFoundError') {
-    return res.sendStatus(httpStatus.BAD_REQUEST);
+    return res.status(httpStatus.NOT_FOUND).send({
+      message: err.message,
+    });
+  }
+
+  if (err.name === 'ticketNotFoundError') {
+    return res.status(httpStatus.NOT_FOUND).send({
+      message: err.message,
+    });
+  }
+
+  if (err.name === 'ticketTypeNotFoundError') {
+    return res.sendStatus(httpStatus.NOT_FOUND);
+  }
+
+  if (err.name === 'ticketNotPaidError') {
+    return res.sendStatus(httpStatus.PAYMENT_REQUIRED);
+  }
+
+  if (err.name === 'ticketNotOfferHotel') {
+    return res.sendStatus(httpStatus.PAYMENT_REQUIRED);
+  }
+
+  if (err.name === 'hotelsNotFoundError') {
+    return res.sendStatus(httpStatus.NOT_FOUND);
   }
 
   if (err.name === 'InvalidCEPError') {
-    return res.status(httpStatus.BAD_REQUEST).send(err.message);
+    return res.status(httpStatus.BAD_REQUEST).send({
+      message: err.message,
+    });
   }
 
   if (err.hasOwnProperty('status') && err.name === 'RequestError') {
